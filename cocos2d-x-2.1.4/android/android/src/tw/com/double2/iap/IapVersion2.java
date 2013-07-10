@@ -23,77 +23,60 @@ THE SOFTWARE.
  ****************************************************************************/
 package tw.com.double2.iap;
 
-import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxEditText;
-import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
-
-import com.android.billing.util.IabHelper;
+import org.cocos2dx.lib.*;
+import tw.com.double2.GoogleIAB;
 
 import android.content.Intent;
-import tw.com.double2.*;
-
 import android.os.Bundle;
 import android.util.Log;
 
-public class mainAndroid extends Cocos2dxActivity
-{
+public class IapVersion2 extends Cocos2dxActivity {
 	private Cocos2dxGLSurfaceView mGLView;
 
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// 增加這行
-		GoogleIAB.setup(this, mGLView, getApplicationContext());
+
+		mGLView = new Cocos2dxGLSurfaceView(this);
+		mGLView.setEGLContextClientVersion(2);
+		mGLView.setCocos2dxRenderer(new Cocos2dxRenderer());
+		GoogleIAB.setup(this, getApplicationContext());
 		// end 增加這行
-
-		String packageName = getApplication().getPackageName();
-		super.setPackageName(packageName);
-
-		setContentView(R.layout.game_demo);
-		mGLView = (Cocos2dxGLSurfaceView) findViewById(R.id.game_gl_surfaceview);
-		mGLView.setTextField((Cocos2dxEditText) findViewById(R.id.textField));
 	}
 
-	// 增加下列function
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (GoogleIAB.mHelper == null)
 			return;
-		Log.d("ActivityResult", "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+		Log.d("ActivityResult", "onActivityResult(" + requestCode + ","
+				+ resultCode + "," + data);
 
-		if (!GoogleIAB.mHelper.handleActivityResult(requestCode, resultCode, data))
-		{
+		if (!GoogleIAB.mHelper.handleActivityResult(requestCode, resultCode,
+				data)) {
 			// not handled, so handle it ourselves (here's where you'd
 			// perform any handling of activity results not related to in-app
 			// billing...
 			super.onActivityResult(requestCode, resultCode, data);
-		} else
-		{
+		} else {
 			Log.d("ActivityResult", "onActivityResult handled by IABUtil.");
 		}
 	}
 
-	// end 增加下列function
-
+	
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		mGLView.onPause();
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 		mGLView.onResume();
 	}
-
-	static
-	{
+	static {
 		System.loadLibrary("game");
 	}
+
 }

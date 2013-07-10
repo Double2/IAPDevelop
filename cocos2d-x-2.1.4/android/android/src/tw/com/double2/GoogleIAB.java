@@ -67,10 +67,9 @@ public class GoogleIAB extends Activity
 	// ************************************************************************************************
 	// 建立這class Activity
 	// ************************************************************************************************
-	public static void setup(Activity activity, GLSurfaceView vw, Context ct)
+	public static void setup(Activity activity, Context ct)
 	{
 		me = activity;
-		mGLSurfaceView = vw;
 		me_context = ct;
 	}
 
