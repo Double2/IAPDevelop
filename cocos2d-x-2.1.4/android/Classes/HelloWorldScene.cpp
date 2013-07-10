@@ -58,7 +58,7 @@ char ItemID[MAX_IAP_NUM][50] =
 CCScene* HelloWorld::scene()
 {
 	// 'scene' is an autorelease object
-	CCScene *scene = CCScene::node();
+	CCScene *scene = CCScene::create();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	scene->setScaleX(CCDirector::sharedDirector()->getWinSize().width/1280.0f);
     scene->setScaleY(CCDirector::sharedDirector()->getWinSize().height/720.0f);
@@ -66,9 +66,9 @@ CCScene* HelloWorld::scene()
 #endif
     
 	// 'layer' is an autorelease object
-	layerStore = HelloWorld::node();
-    layerIap = IAP_TYPE::node();
-    
+	layerStore = HelloWorld::create();
+//    layerIap = IAP_TYPE::create();
+
 	// add layer as a child to scene
 	scene->addChild(layerStore);
     scene->addChild(layerIap);
@@ -89,17 +89,18 @@ bool HelloWorld::init()
 	{
 		return false;
 	}
-    this->setIsTouchEnabled(true);
-    this->setIsKeypadEnabled(true);
+  this->setTouchEnabled(true);
+  
+    this->setKeypadEnabled(true);
     
     Depth = 0;
     // LayerColor 初始化
-    this->initWithColor(ccc4f(0,0,0,150));
+//    this->initWithColor(ccc4f(0,0,0,150));
     this->setContentSize(CCSizeMake(WorkSize_W, WorkSize_H));
-    this->setIsVisible(true);
+    this->setVisible(true);
     
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Common.plist");
-	CCSpriteBatchNode *spriteCommon = CCSpriteBatchNode::batchNodeWithFile("Common.png");
+	CCSpriteBatchNode *spriteCommon = CCSpriteBatchNode::create("Common.png");
 	spriteCommon->getTextureAtlas()->resizeCapacity(50);
 	addChild(spriteCommon);
     
@@ -108,43 +109,43 @@ bool HelloWorld::init()
 	//    you may modify it.
 
 	// add a "close" icon to exit the progress. it's an autorelease object
-	CCMenuItemImage *pCloseItem = CCMenuItemImage::itemFromNormalImage(
+	CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
 										"CloseNormal.png",
 										"CloseSelected.png",
 										this,
 										menu_selector(HelloWorld::menuCloseCallback) );
 	pCloseItem->setPosition( ccp(WorkSize_W - 20, 20) );
-	CCMenu* pMenu = CCMenu::menuWithItems(pCloseItem, NULL);
+	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition( CCPointZero );
 	this->addChild(pMenu);
     
 
-	CCLabelTTF* pLabel = CCLabelTTF::labelWithString("Hello World", "Thonburi", 50);
+	CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Thonburi", 50);
 	pLabel->setPosition( ccp(WorkSize_W/ 2, WorkSize_H - 20) );
 	this->addChild(pLabel);
 
     // 商店進入鈕
-    CCMenuItemImage *StoreItem = CCMenuItemImage::itemFromNormalImage(
+    CCMenuItemImage *StoreItem = CCMenuItemImage::create(
                                                    "HelloWorld.png",
                                                    "HelloWorld.png",
                                                    this,
                                                    menu_selector(HelloWorld::StoreButtonCallback));
 	StoreItem->setPosition( ccp(WorkSize_W/2, WorkSize_H/2) );
-	StoreMenu = CCMenu::menuWithItems(StoreItem, NULL);
+	StoreMenu = CCMenu::create(StoreItem, NULL);
 	StoreMenu->setPosition( CCPointZero );
 	this->addChild(StoreMenu);
     
     // 商店介面
-    spriteStoreBG = CCSprite::spriteWithSpriteFrameName("ui_shop_01.png");
+    spriteStoreBG = CCSprite::createWithSpriteFrameName("ui_shop_01.png");
     spriteStoreBG->setPosition(fcp(Rectx, Recty));
-    spriteStoreBG->setIsVisible(false);
+    spriteStoreBG->setVisible(false);
     this->addChild(spriteStoreBG, Depth++);
     
     
     // 商店離開鈕
-    CCMenuItem *StoreExitItem = CCMenuItemSprite::itemFromNormalSprite(
-                                   CCSprite::spriteWithSpriteFrameName("ui_shop_04.png"), CCSprite::spriteWithSpriteFrameName("ui_shop_04.png"), this, menu_selector(HelloWorld::StoreExitBtnCallback));
-    CCMenu *StoreExitMenu = CCMenu::menuWithItem(StoreExitItem);
+    CCMenuItem *StoreExitItem = CCMenuItemSprite::create(
+                                   CCSprite::createWithSpriteFrameName("ui_shop_04.png"), CCSprite::createWithSpriteFrameName("ui_shop_04.png"), this, menu_selector(HelloWorld::StoreExitBtnCallback));
+    CCMenu *StoreExitMenu = CCMenu::create(StoreExitItem);
     StoreExitMenu->setPosition(ccp(StoreExitx, StoreExity));
     spriteStoreBG->addChild(StoreExitMenu);
     
@@ -155,52 +156,52 @@ bool HelloWorld::init()
     for(int a = 0; a < MAX_IAP_NUM; a++)
     {
         // 商品項目
-        spriteStoreItems[a] = CCSprite::spriteWithSpriteFrame(frameStoreItems[0]);
+        spriteStoreItems[a] = CCSprite::createWithSpriteFrame(frameStoreItems[0]);
         spriteStoreItems[a]->setPosition(ccp(StoreItemx[a], StoreItemy[a]));
         spriteStoreItems[a]->setOpacity(255);
-        spriteStoreItems[a]->setIsVisible(false);
+        spriteStoreItems[a]->setVisible(false);
         spriteStoreBG->addChild(spriteStoreItems[a], a);
         
         // 商品內容
-        labelItemContent[a] = CCLabelTTF::labelWithString("------", "arial", ItemContentFrontSize);
+        labelItemContent[a] = CCLabelTTF::create("------", "arial", ItemContentFrontSize);
         labelItemContent[a]->setColor(ccWHITE);
         labelItemContent[a]->setPosition(ccp(ItemContentx[a],ItemContenty[a]));
         spriteStoreItems[a]->addChild(labelItemContent[a]);
         
         // 商項目購買金額初始化
-        labelItemPrice[a] = CCLabelTTF::labelWithString("------", "arial", ItemPriceFrontSize);
+        labelItemPrice[a] = CCLabelTTF::create("------", "arial", ItemPriceFrontSize);
         labelItemPrice[a]->setColor(ccWHITE);
         labelItemPrice[a]->setPosition(ccp(ItemPricex[a],ItemPricey[a]));
         spriteStoreItems[a]->addChild(labelItemPrice[a]);
     }
     
     // 商店Loading背景
-    spriteLoadingBG = CCSprite::spriteWithSpriteFrameName("loading10.png");
+    spriteLoadingBG = CCSprite::createWithSpriteFrameName("loading10.png");
     spriteLoadingBG->setPosition(fcp(LoadingBGx, LoadingBGy));
-    spriteLoadingBG->setIsVisible(false);
+    spriteLoadingBG->setVisible(false);
     spriteLoadingBG->setScale(0.3f);
     this->addChild(spriteLoadingBG, Depth++);
     // 商店Loading背景動畫
-    spriteLoadingBG->runAction(CCRepeatForever::actionWithAction(CCRotateBy::actionWithDuration(1.0f, 360.0f)));
-    
-    // 商店Loading文字(讀取中...)
-    spriteLoading = CCSprite::spriteWithSpriteFrameName("loading01.png");
-    spriteLoading->setPosition(fcp(Loadingx, Loadingy));
-    spriteLoading->setIsVisible(false);
-    this->addChild(spriteLoading, Depth++);
-    // 商店Loading文字字(讀取中...)動畫
-    CCAnimation* animation = CCAnimation::animation();
-    animation->setDelay(0.1f);
-    for(int a = 0; a < 8; a++)
-    {
-        a < 1 ?
-        sprintf(ResourceName, "loading%02d.png", 1):
-        sprintf(ResourceName, "loading%02d.png", a);
-        
-        animation->addFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(ResourceName));
-        spriteLoading->runAction(CCRepeatForever::actionWithAction(CCAnimate::actionWithAnimation(animation, true)));
-    }
-	
+//    spriteLoadingBG->runAction(CCRepeatForever::actionWithAction(CCRotateBy::actionWithDuration(1.0f, 360.0f)));
+//    
+//    // 商店Loading文字(讀取中...)
+//    spriteLoading = CCSprite::createWithSpriteFrameName("loading01.png");
+//    spriteLoading->setPosition(fcp(Loadingx, Loadingy));
+//    spriteLoading->setVisible(false);
+//    this->addChild(spriteLoading, Depth++);
+//    // 商店Loading文字字(讀取中...)動畫
+//    CCAnimation* animation = CCAnimation::animation();
+//    animation->setDelay(0.1f);
+//    for(int a = 0; a < 8; a++)
+//    {
+//        a < 1 ?
+//        sprintf(ResourceName, "loading%02d.png", 1):
+//        sprintf(ResourceName, "loading%02d.png", a);
+//        
+//        animation->addFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(ResourceName));
+//        spriteLoading->runAction(CCRepeatForever::actionWithAction(CCAnimate::actionWithAnimation(animation, true)));
+//    }
+
 	return true;
 }
 // *************************************************************************************************
@@ -209,7 +210,7 @@ bool HelloWorld::init()
 void HelloWorld::menuCloseCallback(CCObject* pSender)
 {
     CCLog("%s",__PRETTY_FUNCTION__);
-    if(this->getIsKeypadEnabled())
+    if(this->isKeypadEnabled())
 	{
         CCDirector::sharedDirector()->end();
 
@@ -230,9 +231,9 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 void HelloWorld::StoreButtonCallback(CCObject* pSender)
 {
     CCLog("%s",__PRETTY_FUNCTION__);
-    if(this->getIsKeypadEnabled())
+    if(this->isKeypadEnabled())
     {
-        StoreMenu->setIsTouchEnabled(false); // 關閉商店進入按鈕觸碰
+        StoreMenu->setTouchEnabled(false); // 關閉商店進入按鈕觸碰
 #if (IAP_PLATFORM == IAP_PLATFORM_GOOGLE)
         layerIap->SetPublicKey(keyd, keyb, keytwo); // 設定金鑰
 #endif
@@ -246,9 +247,9 @@ void HelloWorld::StoreButtonCallback(CCObject* pSender)
 void HelloWorld::StoreExitBtnCallback(CCObject* pSender)
 {
     CCLog("%s",__PRETTY_FUNCTION__);
-    if(this->getIsKeypadEnabled())
+    if(this->isKeypadEnabled())
 	{
-        StoreMenu->setIsTouchEnabled(true); // 開啟商店進入按鈕觸碰
+        StoreMenu->setTouchEnabled(true); // 開啟商店進入按鈕觸碰
         layerIap->DisableStoreUI();// 關閉商店選單
         layerIap->DisableLoadingUI();// 關閉Loading動畫
     }
@@ -258,16 +259,16 @@ void HelloWorld::StoreExitBtnCallback(CCObject* pSender)
 // *************************************************************************************************
 void HelloWorld::Enable_Touch(void)
 {
-    this->setIsTouchEnabled(true);
-    this->setIsKeypadEnabled(true);
+    this->setTouchEnabled(true);
+    this->setKeypadEnabled(true);
 }
 // *************************************************************************************************
 // 關閉觸碰
 // *************************************************************************************************
 void HelloWorld::Disable_Touch(void)
 {
-    this->setIsTouchEnabled(false);
-    this->setIsKeypadEnabled(false);
+    this->setTouchEnabled(false);
+    this->setKeypadEnabled(false);
 }
 // *************************************************************************************************
 // 觸控﹣按下
@@ -275,13 +276,13 @@ void HelloWorld::Disable_Touch(void)
 void HelloWorld::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
 {
     CCLog("%s", __PRETTY_FUNCTION__);
-    if(this->getIsKeypadEnabled())
+    if(this->isKeypadEnabled())
     {
         CCSetIterator it = pTouches->begin();
         CCTouch *touch = (CCTouch*)(*it);
         
         // 获取点在视图中的坐标（左上角为原点）
-        CCPoint touchLocation = touch->locationInView();
+        CCPoint touchLocation = touch->getLocationInView();
         // 把点的坐标转换成OpenGL坐标（左下角为原点）
         touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
         
@@ -294,7 +295,7 @@ void HelloWorld::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEve
             CCRect rect = spriteStoreItems[a]->getTextureRect();
             rect.origin = CCPointZero;
             
-            if(CCRect::CCRectContainsPoint(rect, local))
+            if(rect.containsPoint(local))
             {
                 layerIap->BuyItem(a); // 購買項目
                 break;
@@ -308,7 +309,7 @@ void HelloWorld::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEve
 void IAP_TYPE::EnableStoreUI(void)
 {
     // 顯示商店選單
-    layerStore->spriteStoreBG->setIsVisible(true);
+    layerStore->spriteStoreBG->setVisible(true);
     
     for(int a = 0; a < InAppPurchase.Num; a++)
     {
@@ -342,7 +343,7 @@ void IAP_TYPE::EnableStoreUI(void)
                 break;
         }
         
-        layerStore->spriteStoreItems[a]->setIsVisible(true);
+        layerStore->spriteStoreItems[a]->setVisible(true);
         
     }
 }
@@ -353,7 +354,7 @@ void IAP_TYPE::EnableStoreUI(void)
 void IAP_TYPE::DisableStoreUI(void)
 {
     // 顯示商店選單
-    layerStore->spriteStoreBG->setIsVisible(false);
+    layerStore->spriteStoreBG->setVisible(false);
 }
 // *************************************************************************************************
 // 開啟Loading動畫
@@ -363,8 +364,8 @@ void IAP_TYPE::EnableLoadingUI(void)
     // 關閉觸碰
     layerStore->Disable_Touch();
     
-    layerStore->spriteLoadingBG->setIsVisible(true);
-    layerStore->spriteLoading->setIsVisible(true);
+    layerStore->spriteLoadingBG->setVisible(true);
+    layerStore->spriteLoading->setVisible(true);
     
 }
 // *************************************************************************************************
@@ -375,8 +376,8 @@ void IAP_TYPE::DisableLoadingUI(void)
     // 啓動觸碰
     layerStore->Enable_Touch();
     
-    layerStore->spriteLoadingBG->setIsVisible(false);
-    layerStore->spriteLoading->setIsVisible(false);
+    layerStore->spriteLoadingBG->setVisible(false);
+    layerStore->spriteLoading->setVisible(false);
     
 }
 

@@ -63,8 +63,8 @@ class Layer_GoogleIAB: public cocos2d::CCLayer
 	//工作狀態 0:等待工作 1:購買/消耗成功 -1:有錯誤
 	int Work_Status;
 	virtual bool init();
-	void updateGame(ccTime dt);
-	LAYER_NODE_FUNC(Layer_GoogleIAB);
+	void updateGame(float dt);
+	CREATE_FUNC(Layer_GoogleIAB);
 
 	private:
 	char d[200];
