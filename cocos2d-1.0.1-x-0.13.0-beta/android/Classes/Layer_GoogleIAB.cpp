@@ -90,7 +90,7 @@ bool Layer_GoogleIAB::CheckInternet()
 }
 // ************************************************************************************************
 // ************************************************************************************************
-void Layer_GoogleIAB::updateGame(ccTime dt)
+void Layer_GoogleIAB::updateGame(float dt)
 {
 	switch (Work_Status)
 	{

@@ -14,7 +14,6 @@
 
 #include "platform/android/jni/JniHelper.h"
 #define IABCLASS_PATH "tw/com/double2/GoogleIAB"
-using namespace std;
 typedef void (*actionFinished)(int);
 
 class Google_IAB
