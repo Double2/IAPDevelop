@@ -44,12 +44,12 @@ bool Layer_IOS_IAP::init()
 	}
     
 	// 設定為不可觸控
-	this->setIsTouchEnabled(false);
-	this->setIsKeypadEnabled(false);
+	this->setTouchEnabled(false);
+	this->setKeypadEnabled(false);
     
     // LayerColor 初始化
-    this->initWithColor(ccc4f(0,0,0,0));
-    this->setIsVisible(true);
+//    this->initWithColor(ccc4f(0,0,0,0));
+    this->setVisible(true);
     
     // 程序狀態初始化
     layerIosIapStatus = IAP_Process_Status_None;
@@ -62,7 +62,7 @@ bool Layer_IOS_IAP::init()
 // *************************************************************************************************
 // Layer 主程序
 // *************************************************************************************************
-void Layer_IOS_IAP::updateGame(ccTime dt)
+void Layer_IOS_IAP::updateGame(float dt)
 {
     Delay += dt;
     
@@ -176,8 +176,8 @@ void Layer_IOS_IAP::Quit(void)
 // *************************************************************************************************
 void Layer_IOS_IAP::Enable_Touch(void)
 {
-	this->setIsTouchEnabled(true);
-	this->setIsKeypadEnabled(true);
+	this->setTouchEnabled(true);
+	this->setKeypadEnabled(true);
 }
 
 // *************************************************************************************************
@@ -185,8 +185,8 @@ void Layer_IOS_IAP::Enable_Touch(void)
 // *************************************************************************************************
 void Layer_IOS_IAP::Disable_Touch(void)
 {
-	this->setIsTouchEnabled(false);
-	this->setIsKeypadEnabled(false);
+	this->setTouchEnabled(false);
+	this->setKeypadEnabled(false);
 }
 
 //***************************************************************************************************************

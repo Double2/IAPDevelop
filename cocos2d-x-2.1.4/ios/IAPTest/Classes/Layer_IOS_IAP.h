@@ -91,12 +91,12 @@ public:
 	/*----- 其他 -----*/ 
 	virtual bool init();
 	static cocos2d::CCScene* scene();
-	void updateGame(ccTime dt);
+	void updateGame(float dt);
 	void Quit(void);
 	void Enable_Touch(void);
 	void Disable_Touch(void);
     
-	LAYER_NODE_FUNC(Layer_IOS_IAP);
+	CREATE_FUNC(Layer_IOS_IAP);
 };
 
 //********************************************************
